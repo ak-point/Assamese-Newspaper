@@ -4,7 +4,13 @@
   <meta charset="UTF-8">
   <title>অসমীয়া নিউজ</title>
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -16,40 +22,43 @@
       color: white;
       padding: 15px;
       text-align: center;
-      font-size: 22px;
+      font-size: 20px;
       font-weight: bold;
     }
 
     .container {
-      max-width: 700px; /* 🔥 narrower for single column */
+      width: 100%;
+      max-width: 800px;
       margin: auto;
-      padding: 15px;
+      padding: 10px;
     }
 
-    /* 🔥 Single column */
+    /* 🔥 Vertical feed */
     .news-list {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 15px; /* space between cards */
     }
 
     .card-link {
       text-decoration: none;
       color: inherit;
       display: block;
+      width: 100%;
     }
 
     .card {
+      width: 100%; /* 🔥 full width */
       background: white;
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transition: 0.3s;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+      transition: 0.2s;
       cursor: pointer;
     }
 
     .card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
     }
 
     .card:active {
@@ -58,7 +67,7 @@
 
     .card img {
       width: 100%;
-      height: 200px;
+      height: 220px;
       object-fit: cover;
     }
 
@@ -75,8 +84,28 @@
 
     .loading {
       text-align: center;
-      font-size: 18px;
+      font-size: 16px;
       padding: 20px;
+    }
+
+    /* 📱 Mobile optimization */
+    @media (max-width: 600px) {
+      header {
+        font-size: 18px;
+        padding: 12px;
+      }
+
+      .container {
+        padding: 8px;
+      }
+
+      .card img {
+        height: 180px;
+      }
+
+      .title {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
@@ -104,14 +133,11 @@ const firebaseConfig = {
   storageBucket: "assamese-newspaper-93903.appspot.com"
 };
 
-// Init Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Reference
 const newsRef = ref(db, "news");
 
-// Load data
 onValue(newsRef, (snapshot) => {
   const data = snapshot.val();
   const container = document.getElementById("newsContainer");
@@ -128,7 +154,6 @@ onValue(newsRef, (snapshot) => {
       <a href="${item.link || '#'}" target="_blank" class="card-link">
         <div class="card">
           <img src="${item.image || ''}" alt="news image">
-
           <div class="card-content">
             <div class="title">
               ${item.header || "No Title"}
